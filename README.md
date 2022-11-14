@@ -17,5 +17,5 @@ npm start
 ```
 
 Observe: When selecting an item with a high count (1000+) and an item with a low
-count (1-10), the item with the low count will display 0. The item with the low
-count should be searched for.
+count (somewhere between 1-10), the item with the low count will display 0. The
+item with the low count should be searched for.
