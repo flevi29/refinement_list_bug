@@ -1,7 +1,6 @@
 import "dotenv/config";
+import data from "./data.json" assert { type: "json" };
 import algoliasearch from "algoliasearch";
-import { MarcDataExtractor } from "./extractor.mjs";
-import { harvest } from "./decoder.mjs";
 
 const {
   REACT_APP_ALGOLIA_API_KEY,
@@ -23,20 +22,11 @@ if (!await index.exists()) {
   });
 }
 
-const extractor = new MarcDataExtractor("algolia");
-
 const BATCH_SIZE = 200;
 
-const mainArr = [];
-for await (const arr of harvest("./data/DATA.mrc")) {
-  for (const [id, rec] of arr) {
-    mainArr.push(extractor.extractData(id, rec));
-    if (mainArr.length > BATCH_SIZE) {
-      await index.saveObjects(mainArr.splice(0, BATCH_SIZE));
-    }
-  }
+while (data.length > BATCH_SIZE) {
+  await index.saveObjects(data.splice(0, BATCH_SIZE), { autoGenerateObjectIDIfNotExist: true });
 }
-
-if (mainArr.length > 0) {
-  await index.saveObjects(mainArr);
+if (data.length > 0) {
+  await index.saveObjects(data, { autoGenerateObjectIDIfNotExist: true });
 }

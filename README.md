@@ -1,6 +1,6 @@
 Need:
 
-1. Node.js
+1. Node.js LTS (only tested with 18.x)
 2. Docker or Algolia
 
 Run:
@@ -16,6 +16,6 @@ npm run harvest:algolia
 npm start
 ```
 
-Observe: When selecting an item with a high count (1000+) and an item with a low
-count (somewhere between 1-10), the item with the low count will display 0. The
+Observe: When selecting an item with a high count (300+) like `Sík Sándor` and an item with a low
+count (somewhere between 1-10) like `Sajó Géza`, the item with the low count will display 0. The
 item with the low count should be searched for.

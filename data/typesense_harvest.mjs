@@ -1,6 +1,5 @@
 import "dotenv/config";
-import { harvest } from "./decoder.mjs";
-import { MarcDataExtractor } from "./extractor.mjs";
+import data from "./data.json" assert { type: "json" };
 import { Client, Errors } from "typesense";
 
 const { REACT_APP_COLL_NAME, REACT_APP_TYPE_API_KEY, REACT_APP_TYPE_PORT } =
@@ -71,20 +70,11 @@ function createManyDocuments(documents) {
   return importManyDocuments(documents, "create");
 }
 
-const extractor = new MarcDataExtractor("typesense");
-
 const BATCH_SIZE = 200;
 
-const mainArr = [];
-for await (const arr of harvest("./data/DATA.mrc")) {
-  for (const [id, rec] of arr) {
-    mainArr.push(extractor.extractData(id, rec));
-    if (mainArr.length > BATCH_SIZE) {
-      await createManyDocuments(mainArr.splice(0, BATCH_SIZE));
-    }
-  }
+while (data.length > BATCH_SIZE) {
+  await createManyDocuments(data.splice(0, BATCH_SIZE));
 }
-
-if (mainArr.length > 0) {
-  await createManyDocuments(mainArr);
+if (data.length > 0) {
+  await createManyDocuments(data);
 }
