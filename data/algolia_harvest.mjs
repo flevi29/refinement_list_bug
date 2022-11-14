@@ -25,7 +25,9 @@ if (!await index.exists()) {
 const BATCH_SIZE = 200;
 
 while (data.length > BATCH_SIZE) {
-  await index.saveObjects(data.splice(0, BATCH_SIZE), { autoGenerateObjectIDIfNotExist: true });
+  await index.saveObjects(data.splice(0, BATCH_SIZE), {
+    autoGenerateObjectIDIfNotExist: true,
+  });
 }
 if (data.length > 0) {
   await index.saveObjects(data, { autoGenerateObjectIDIfNotExist: true });
